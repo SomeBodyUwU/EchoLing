@@ -1,0 +1,27 @@
+/* Define the seamless rainbow shimmer animation */
+@keyframes rainbow {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 100% 100%;
+    }
+}
+
+/* Apply the rainbow effect to links */
+a.rainbow-link {
+    display: inline-block;
+    color: #ffffff; /* Text color */
+    text-decoration: none; /* Remove underline */
+    background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #ff00ff);
+    background-size: 400% 400%; /* Larger background size for smoother transition */
+    animation: rainbow 3s alternate infinite; /* Smooth, continuous animation */
+    -webkit-background-clip: text; /* Clip the background to the text */
+    background-clip: text; /* Clip the background to the text */
+    color: transparent; /* Make text transparent to show background */
+}
+
+/* Hover effect */
+a.rainbow-link:hover {
+    text-decoration: underline; /* Underline on hover */
+}

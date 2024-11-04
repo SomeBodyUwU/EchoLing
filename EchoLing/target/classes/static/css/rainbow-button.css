@@ -1,0 +1,72 @@
+/* Define the seamless rainbow shimmer animation */
+@keyframes rainbow {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 100% 100%;
+    }
+}
+
+/* Base style for the submit button */
+button.rainbow-button {
+    padding: 10px;
+    background-color: #555555; /* Button background color */
+    color: #ffffff; /* Button text color */
+    border: none;
+    border-radius: 20px; /* Rounded button corners */
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease-in-out, color 0.3s ease-in-out; /* Smooth transition */
+}
+
+/* Hover effect for the rainbow shimmer button */
+button.rainbow-button:hover {
+    background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #ff00ff);
+    background-size: 400% 400%; /* Larger background size for smoother transition */
+    animation: rainbow 3s alternate infinite; /* Apply the rainbow animation */
+    color: #000000; /* Keep the text white during hover */
+}
+
+/* Disabled button styling */
+button.rainbow-button:disabled {
+    background-color: #333333; /* Darker background for disabled state */
+    color: #777777; /* Muted text color */
+    cursor: not-allowed; /* Change cursor to show it's disabled */
+    opacity: 0.6; /* Make the button slightly transparent */
+    animation: none; /* Disable the shimmer animation */
+    pointer-events: none; /* Prevent any interaction */
+
+    /* Hatching effect */
+    /*background-image: linear-gradient(30deg, #737171 25%, transparent 25%, transparent 50%, #737171 50%, #737171 75%, transparent 75%);
+    background-size: 40px 22.5px; /* Adjust size of hatch lines */
+}
+
+button.rainbow-button-vocabulary-submission {
+    padding: 10px;
+    background-color: #555555; /* Button background color */
+    color: #ffffff; /* Button text color */
+    border: none;
+    border-radius: 20px; /* Rounded button corners */
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease-in-out, color 0.3s ease-in-out; /* Smooth transition */
+}
+
+/* Hover effect for the rainbow shimmer button */
+button.rainbow-button-vocabulary-submission:hover {
+    background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #ff00ff);
+    animation: rainbow 3s alternate infinite; /* Apply the rainbow animation */
+    color: #000000; /* Keep the text white during hover */
+    background-size: 400% 400%; /* Larger background size for smoother transition */
+}
+
+/* Disabled button styling */
+button.rainbow-button-vocabulary-submission.is-disabled {
+    background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #ff00ff);
+    animation: rainbow 3s alternate infinite;
+    cursor: none; /* Change cursor to show it's disabled */
+    pointer-events: none;
+    opacity: 1; /* Make the button slightly transparent */
+    color: #000000; /* Keep the text white during hover */
+}

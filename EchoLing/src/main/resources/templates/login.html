@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/black.css}">
+</head>
+<body style="justify-content: center; align-items: center;">
+    <div class="login-container">
+        <h2>Login</h2>
+        <form action="/login" method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <div class="forgot-password">
+            <!--a href="/forgot-password" style="display: block">Forgot your password?</a-->
+            <!--a href="/guest" style="display: block">Sign up as Guest</a-->
+            <a href="/sign-up" style="display: block">Sign up</a>
+        </div>
+        <div class="error-message">
+            <p style="color: deepskyblue" th:text="${error}"></p>
+        </div>
+    </div>
+</body>
+</html>

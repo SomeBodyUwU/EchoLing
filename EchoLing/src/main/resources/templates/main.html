@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendation System</title>
+    <link rel="stylesheet" href="css/black.css">
+    <style>
+        #filter-form {
+            height: 3rem;
+            display: flex;
+            flex-direction: row;
+            align-content: center;
+        }
+        #filter-form label {
+            flex-basis: 100%;
+            font-weight: bold;
+            margin: 0 1.25rem;
+            text-align: end;
+        }
+
+        #filter-form select {
+            flex: 1 1 100%;
+            padding: 8px;
+            border: 1px solid #554444;
+            border-radius: 20px;
+            background-color: #242222;
+            color: #999;
+            font-size: 1em;
+            height: 2rem;
+            margin: 0 1.25rem;
+        }
+
+        #filter-form input {
+            min-width: 5rem;
+        }
+
+        #filter-form button {
+            margin: 0 1.25rem;
+            padding: 0.25rem;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #554444;
+            background-color: #242222;
+            color: #999;
+            box-sizing: border-box;
+            border-radius: 18px;
+            transition: border-color 0.3s ease;
+
+        }
+
+        input:focus {
+            border-color: #2196F3;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            background-color: #4CAF50;
+            padding: 5px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="logo">EchoLing</div>
+    <div class="nav-links">
+        <a href="/translate">Create Translation</a>
+        <a href="/collections">My Collections</a>
+        <a href="/profile">Profile</a>
+        <a th:href="@{/definition}">Discover Definitions</a>
+        <a th:href="@{/vocabulary}">Vocabulary</a>
+        <a th:href="@{/quiz}">Quiz</a>
+        <a href="/login">Login</a>
+    </div>
+</div>
+
+<div class="main-content">
+
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Search for recommendations...">
+        <button style="max-width: 10rem;margin: 0 2rem;" id="search-button">Search</button>
+    </div>
+
+    <div class="filters">
+        <form id="filter-form" style="display: flex;">
+            <label for="difficulty">Difficulty:</label>
+            <select name="difficulty" id="difficulty">
+                <option value="">Any</option>
+                <option value="Essential">Essential</option>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+                <option value="Professional">Professional</option>
+            </select>
+            <label for="sourceLang">Source Language:</label>
+            <input type="text" name="sourceLang" id="sourceLang"/>
+            <label for="targetLang">Target Language:</label>
+            <input type="text" name="targetLang" id="targetLang"/>
+            <label for="minViews">Minimum Views:</label>
+            <input type="number" name="minViews" id="minViews"/>
+            <label for="minDate">From Date:</label>
+            <input type="date" name="minDate" id="minDate"/>
+            <label for="maxDate">To Date:</label>
+            <input type="date" name="maxDate" id="maxDate"/>
+            <label for="sort">Sort By:</label>
+            <select name="sort" id="sort">
+                <option value="">None</option>
+                <option value="popularity">Popularity</option>
+                <option value="oldest">Oldest</option>
+                <option value="newest">Newest</option>
+            </select>
+            <button type="submit">Apply Filters</button>
+        </form>
+    </div>
+
+    <div class="recommendation-container" id="recommendation-container"></div>
+</div>
+
+<script>
+    let page = 0;
+    const size = 100;
+    let isLoading = false;
+
+    function loadTranslations(reset = false) {
+        if (isLoading) return;
+        isLoading = true;
+
+        if (reset) {
+            page = 0;
+            document.getElementById('recommendation-container').innerHTML = '';
+        }
+
+        const search = document.getElementById('search-input').value;
+        const difficulty = document.getElementById('difficulty').value;
+        const sourceLang = document.getElementById('sourceLang').value;
+        const targetLang = document.getElementById('targetLang').value;
+        const minViews = document.getElementById('minViews').value;
+        const minDate = document.getElementById('minDate').value;
+        const maxDate = document.getElementById('maxDate').value;
+        const sort = document.getElementById('sort').value;
+
+        const params = new URLSearchParams();
+        if (search) params.append('search', search);
+        if (difficulty) params.append('difficulty', difficulty);
+        if (sourceLang) params.append('sourceLang', sourceLang);
+        if (targetLang) params.append('targetLang', targetLang);
+        if (minViews) params.append('minViews', minViews);
+        if (minDate) params.append('minDate', minDate);
+        if (maxDate) params.append('maxDate', maxDate);
+        if (sort) params.append('sort', sort);
+        params.append('page', page);
+        params.append('size', size);
+
+        fetch('/api/main?' + params.toString())
+            .then(response => {
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    return response.json();
+                } else {
+                    throw new Error("Non-JSON response received.");
+                }
+            })
+            .then(data => {
+                displayTranslations(data);
+                isLoading = false;
+                page++;
+            })
+            .catch(error => {
+                console.error('Error fetching translations:', error);
+                isLoading = false;
+            });
+    }
+
+
+    function displayTranslations(translations) {
+        const container = document.getElementById('recommendation-container');
+        translations.forEach(translation => {
+            const recommendationDiv = document.createElement('div');
+            recommendationDiv.classList.add('recommendation');
+
+            recommendationDiv.onclick = function () {
+                window.location.href = '/read?translationId=' + translation.id;
+            };
+
+            const title = document.createElement('h2');
+            title.textContent = translation.name;
+            recommendationDiv.appendChild(title);
+
+            const sourceLangP = document.createElement('p');
+            sourceLangP.classList.add('language');
+            sourceLangP.textContent = 'Source Language: ' + translation.sourceLang;
+            recommendationDiv.appendChild(sourceLangP);
+
+            const targetLangP = document.createElement('p');
+            targetLangP.classList.add('language');
+            targetLangP.textContent = 'Target Language: ' + translation.targetLang;
+            recommendationDiv.appendChild(targetLangP);
+
+            const difficultyP = document.createElement('p');
+            difficultyP.classList.add('level');
+            difficultyP.textContent = 'Difficulty: ' + translation.difficulty;
+            recommendationDiv.appendChild(difficultyP);
+
+            const descriptionP = document.createElement('p');
+            descriptionP.textContent = translation.description;
+            recommendationDiv.appendChild(descriptionP);
+
+            container.appendChild(recommendationDiv);
+        });
+    }
+
+    document.getElementById('filter-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        loadTranslations(true);
+    });
+
+    document.getElementById('search-button').addEventListener('click', function () {
+        loadTranslations(true);
+    });
+
+    window.addEventListener('scroll', function () {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
+            loadTranslations();
+        }
+    });
+
+    // Initial load
+    loadTranslations();
+</script>
+</body>
+</html>

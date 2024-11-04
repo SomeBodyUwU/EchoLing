@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EchoLing</title>
+    <link rel="stylesheet" th:href="@{/css/get_definitions-quiz_page.css}">
+    <link rel="stylesheet" th:href="@{/css/rainbow-link.css}">
+    <link rel="stylesheet" th:href="@{/css/rainbow-button.css}">
+</head>
+
+<body>
+<!-- Toggle Button -->
+<button class="menu-button" onclick="toggleSidebar()">☰</button>
+
+<!-- Sidebar -->
+<div class="sidebar hidden" id="sidebar">
+    <div class="sidebar-header">
+        <img th:src="@{/css/images/default_user.png}" alt="User Logo">
+        <span th:text="${user.username}">User</span>
+        <button class="close-btn" onclick="toggleSidebar()">×</button>
+    </div>
+    <div class="sidebar-nav">
+        <a th:href="@{/main}">Main Page</a>
+        <a th:href="@{/quiz}">Quiz</a>
+        <a th:href="@{/vocabulary}">Vocabulary</a>
+        <a th:href="@{/sign-in}">Change account</a>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="title">
+    <h1>Echo Ling</h1>
+</div>
+<div class="main-container">
+    <form th:action="@{/definition}" method="post">
+        <div class="language-select-container">
+            <h4>Choose output language:</h4>
+            <select class="language-select" name="sourceLang">
+                <option value="Ukrainian" th:selected="${currentLanguage == 'Ukrainian'}">Ukrainian</option>
+                <option value="English" th:selected="${currentLanguage == 'English'}">English</option>
+                <option value="Japanese" th:selected="${currentLanguage == 'Japanese'}">Japanese</option>
+            </select>
+        </div>
+        <input type="text" name="word" placeholder="Enter word to get definition" class="word-input">
+        <div class="button-container">
+            <button type="submit" class="rainbow-button">Get Definition</button>
+        </div>
+    </form>
+    <div class="output" th:if="${wordDefinition}" th:utext="${wordDefinition}">
+    </div>
+</div>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('open');
+        sidebar.classList.toggle('hidden');
+    }
+</script>
+
+<script>
+    const inputField = document.getElementsByClassName('word-input')[0];
+    const firstSubmitButton = document.getElementsByClassName('rainbow-button')[0]; // Get the first button
+
+    // Initially disable the first button if the input field is empty
+    firstSubmitButton.disabled = true;
+
+    // Add an event listener to detect input in the text field
+    inputField.addEventListener('input', function () {
+        if (inputField.value.trim() !== '') {
+            // Enable the first button when input is present
+            firstSubmitButton.disabled = false;
+        } else {
+            // Disable the first button if the input is empty
+            firstSubmitButton.disabled = true;
+        }
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.entry-form').on('submit', function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const form = $(this);
+            const button = form.find('.rainbow-button-vocabulary-submission');
+
+            button.addClass('is-disabled');
+
+            // Get CSRF token from meta tags
+            const csrfToken = $('meta[name="_csrf"]').attr('content');
+            const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+
+            // AJAX request to submit the form
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: {
+                    word: form.find('input[name="word"]').val().trim(),
+                    definition: form.find('input[name="definition"]').val().trim(),
+                    example: form.find('input[name="example"]').val().trim(),
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(csrfHeader, csrfToken);
+                },
+                success: function (response) {
+                    // Only change the button text after successful form submission
+                    form.find('.rainbow-button-vocabulary-submission').text('Successfully added to vocabulary!');
+                },
+                error: function () {
+                    alert('Failed to add entry.');
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+/* General body styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e; /* Dark background color */
+    color: #f5f5f5; /* Light text color */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center elements horizontally */
+    min-height: 100vh; /* Center content vertically */
+}
+
+.main-container {
+    width: 70vw;
+    max-width: 600px;
+    padding: 30px 150px;
+    background-color: #222222;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-align: left;
+}
+
+/* Vocabulary table styling */
+.vocab-table {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #222222;
+    color: #f5f5f5;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.vocab-table th, .vocab-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #444444;
+}
+
+.vocab-table th {
+    background-color: #333333;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.vocab-table tr:hover {
+    background-color: #444444;
+}
+
+.vocab-table td {
+    vertical-align: top;
+}
+
+.vocab-table td p {
+    margin: 5px 0;
+}
+
+.sidebar {
+    height: 100%;
+    width: 0; /* Initially hidden */
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: #111;
+    color: #fff;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px; /* Space for content */
+    z-index: 1000; /* Ensure it's above other content */
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #333;
+}
+
+.sidebar-header img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.sidebar-header span {
+    font-size: 18px;
+}
+
+.sidebar-nav {
+    padding: 20px;
+}
+
+.sidebar-nav a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.sidebar-nav a:hover {
+    background-color: #575757;
+}
+
+/* Sidebar open */
+.sidebar.open {
+    width: 350px; /* Width of the sidebar when open */
+}
+
+/* For hiding the sidebar */
+.sidebar.hidden {
+    display: none; /* Hide sidebar if user is empty */
+}
+
+.menu-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    background-color: #222222;
+    color: #fff;
+    border: solid;
+    cursor: pointer;
+    z-index: 1000; /* Ensure it's above other content */
+    max-width: 70px;
+}
+
+.close-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 35px;
+    background-color: #222222;
+    color: #fff;
+    border: solid;
+    cursor: pointer;
+    z-index: 1000; /* Ensure it's above other content */
+    max-width: 70px;
+}
+button {
+    padding: 10px;
+    background-color: #555555; /* Button background color */
+    color: #ffffff; /* Button text color */
+    border: none;
+    border-radius: 20px; /* Rounded button corners */
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%; /* Full width for button */
+    max-width: unset; /* Maximum width of button */
+    transition: background-color 0.3s ease; /* Smooth transition for background change */
+}
+
+/* Container for the buttons */
+.button-container {
+    display: flex;
+    justify-content: space-between; /* Space buttons evenly */
+    width: 100%; /* Make sure the buttons container takes full width */
+    max-width: 300px; /* Keep it aligned with the input fields */
+    gap: 10px; /* Space between buttons */
+}
+
+button:hover {
+    background-color: #666666; /* Darker button background on hover */
+}
+
+.menu-button:hover {
+    background-color: #333333; /* Darken background on hover */
+}

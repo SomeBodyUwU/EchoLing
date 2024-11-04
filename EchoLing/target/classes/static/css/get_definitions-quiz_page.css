@@ -1,0 +1,262 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e; /* Dark background color */
+    color: #f5f5f5; /* Light text color */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    /*justify-content: center; /* Center elements vertically */
+    align-items: center; /* Center elements horizontally */
+    min-height: 100vh; /* Center content vertically */
+}
+
+.title {
+    color: #f5f5f5; /* Ensure the text color contrasts with the background */
+    font-size: 2em;
+    /*text-align: center; /* Center align the title text */
+    /*margin-bottom: 20px; /* Space between title and main container */
+}
+
+.main-container {
+    width: 70vw; /* Width relative to the viewport width */
+    max-width: 600px;
+    padding: 30px 150px;
+    background-color: #222222; /* Even darker background for the form container */
+    border-radius: 12px; /* More rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-align: left; /* Center text inside the container */
+}
+
+
+.language-select-container {
+    width: 419px;  /* Width relative to the viewport width */
+    max-width: 500px;
+    padding:  10px 10px;
+    background-color: #1e1e1e; /* Even darker background for the form container */
+    border-radius: 12px; /* More rounded corners */
+    /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); */
+    /*margin-top: -10vh; /* Move the container higher */
+    transform: translateY(-10px); /* Fine-tune the vertical position */
+    text-align: center; /* Center text inside the container */
+    display: flex;
+    /*flex-direction: column; /* Arrange children in a column */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    /*position:fixed;*/
+    gap: 10px; /* Space between elements */
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+/* Center heading */
+.main-container h2 {
+    margin: 0; /* Remove default margin */
+    padding-bottom: 20px; /* Add spacing below the heading */
+    color: #ffffff; /* White text color for headings */
+}
+
+.output {
+    background-color: #ffffff; /* White background */
+    color: #000000; /* Black text */
+    border-radius: 8px; /* Rounded corners */
+    padding: 15px; /* Add some padding inside the box */
+    border: 1px solid #ddd; /* Light border to define edges */
+    box-shadow: none; /* No shadow */
+    margin: 10px 0; /* Some margin around the box */
+    font-size: 1rem; /* Adjust font size if needed */
+}
+
+
+/* Style for the language select element */
+.language-select {
+    flex: 1; /* Takes up available space */
+    padding: 10px;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    border: 1px solid #444;
+    border-radius: 8px;
+    background-color: #333;
+    color: #fff;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.language-select:hover,
+.language-select:focus {
+    background-color: #444;
+    border-color: #666;
+    outline: none;
+}
+
+.menu-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    background-color: #222222;
+    color: #fff;
+    border: solid;
+    cursor: pointer;
+    z-index: 1000; /* Ensure it's above other content */
+    max-width: 70px;
+}
+
+.close-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 35px;
+    background-color: #222222;
+    color: #fff;
+    border: solid;
+    cursor: pointer;
+    z-index: 1000; /* Ensure it's above other content */
+    max-width: 70px;
+}
+button {
+    padding: 10px;
+    background-color: #555555; /* Button background color */
+    color: #ffffff; /* Button text color */
+    border: none;
+    border-radius: 20px; /* Rounded button corners */
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%; /* Full width for button */
+    max-width: 400px; /* Maximum width of button */
+    transition: background-color 0.3s ease; /* Smooth transition for background change */
+}
+
+/* Container for the buttons */
+.button-container {
+    display: flex;
+    justify-content: space-between; /* Space buttons evenly */
+    width: 100%; /* Make sure the buttons container takes full width */
+    max-width: 300px; /* Keep it aligned with the input fields */
+    gap: 10px; /* Space between buttons */
+}
+
+button:hover {
+    background-color: #666666; /* Darker button background on hover */
+}
+
+.menu-button:hover {
+    background-color: #333333; /* Darken background on hover */
+}
+
+.sidebar {
+    height: 100%;
+    width: 0; /* Initially hidden */
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: #111;
+    color: #fff;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px; /* Space for content */
+    z-index: 1000; /* Ensure it's above other content */
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #333;
+}
+
+.sidebar-header img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.sidebar-header span {
+    font-size: 18px;
+}
+
+.sidebar-nav {
+    padding: 20px;
+}
+
+.sidebar-nav a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.sidebar-nav a:hover {
+    background-color: #575757;
+}
+
+/* Sidebar open */
+.sidebar.open {
+    width: 350px; /* Width of the sidebar when open */
+}
+
+/* For hiding the sidebar */
+.sidebar.hidden {
+    display: none; /* Hide sidebar if user is empty */
+}
+
+/* Form styles */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center form items horizontally */
+}
+
+input {
+    width: 400px;
+    margin-bottom: 15px;
+    padding: 20px;
+    border: 1px solid #444444; /* Lighter border color */
+    border-radius: 20px; /* More rounded input fields */
+    background-color: #333333; /* Slightly lighter background for inputs */
+    color: #f5f5f5; /* Light text color in inputs */
+    max-width: 400px; /* Maximum width of input fields */
+    font-size: 16px;
+}
+
+input::placeholder {
+    color: #aaaaaa; /* Placeholder text color */
+}
+
+.definition-example-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.definition-example-item {
+    margin-bottom: 10px; /* Space between items */
+}
+
+.entry-form{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Extra info section */
+.extra-info {
+    margin-top: 15px;
+}
+
+.error-message {
+    color: #d8000c;
+    font-family: sans-serif;
+    font-size: 14px;
+    margin-bottom: +20px; /* Moves the error message closer to the input field */
+}
+
+.error-message p {
+    margin: 0;
+}

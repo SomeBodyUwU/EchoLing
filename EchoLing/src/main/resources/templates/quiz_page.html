@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EchoLing</title>
+    <link rel="stylesheet" th:href="@{/css/get_definitions-quiz_page.css}">
+    <link rel="stylesheet" th:href="@{/css/rainbow-link.css}">
+    <link rel="stylesheet" th:href="@{/css/rainbow-button.css}">
+</head>
+
+<body>
+<!-- Toggle Button -->
+<button class="menu-button" onclick="toggleSidebar()">☰</button>
+
+<!-- Sidebar -->
+<div class="sidebar hidden" id="sidebar">
+    <div class="sidebar-header">
+        <img th:src="@{/css/images/default_user.png}" alt="User Logo">
+        <span th:text="${user.username}">User</span>
+        <button class="close-btn" onclick="toggleSidebar()">×</button>
+    </div>
+    <div class="sidebar-nav">
+        <a th:href="@{/main}">Main Page</a>
+        <a th:href="@{/definition}">Discover Definitions</a>
+        <a th:href="@{/vocabulary}">Vocabulary</a>
+        <a th:href="@{/sign-in}">Change account</a>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="title">
+    <h1 class="title">Echo Ling: Quiz</h1>
+</div>
+<div class="main-container">
+    <form th:action="@{/quiz}" method="post">
+        <div class="language-select-container">
+            <h4>Choose output language:</h4>
+            <select class="language-select" name="sourceLang">
+                <option value="Ukrainian" th:selected="${currentLanguage == 'Ukrainian'}">Ukrainian</option>
+                <option value="English" th:selected="${currentLanguage == 'English'}">English</option>
+                <option value="Japanese" th:selected="${currentLanguage == 'Japanese'}">Japanese</option>
+            </select>
+        </div>
+        <div class="button-container">
+            <button type="submit" class="rainbow-button">Generate Quiz</button>
+            <button type="button" id="rainbow-button-reveal" class="rainbow-button">Reveal the word</button>
+        </div>
+    </form>
+    <div class="output" id="text" th:if="${wordDefinition}" th:utext="${wordDefinition}">
+    </div>
+</div>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('open');
+        sidebar.classList.toggle('hidden');
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Delegate the form submission handler to the document to ensure it works even after the DOM is modified
+        $(document).on('submit', '.entry-form', function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const form = $(this);
+            const button = form.find('.rainbow-button-vocabulary-submission');
+
+            button.addClass('is-disabled');
+
+            // Get CSRF token from meta tags
+            const csrfToken = $('meta[name="_csrf"]').attr('content');
+            const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+
+            // AJAX request to submit the form
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: {
+                    word: form.find('input[name="word"]').val().trim(),
+                    definition: form.find('input[name="definition"]').val().trim(),
+                    example: form.find('input[name="example"]').val().trim(),
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(csrfHeader, csrfToken);
+                },
+                success: function (response) {
+                    // Only change the button text after successful form submission
+                    button.text('Successfully added to vocabulary!');
+                    // Set data attribute to indicate this form has been submitted
+                    form.data('added', true);
+                    // Store the state in the global formStates object
+                    const entryId = form.attr('data-entry-id');
+                    formStates[entryId] = true;
+                },
+                error: function () {
+                    alert('Failed to add entry.');
+                }
+            });
+        });
+    });
+</script>
+
+<script th:inline="javascript">
+    // Define the decodeHtml function
+    function decodeHtml(html) {
+        const txt = document.createElement("textarea");
+        txt.innerHTML = html;
+        return txt.value;
+    }
+    let formStates = {}; // Global object to store the state of each form
+
+
+    // Inject Thymeleaf variables
+    const actualWord = /*[[${word}]]*/ '';  // Actual word to reveal
+    const initialText = /*[[${wordDefinition}]]*/ '';  // Initial word definition as provided by Thymeleaf
+
+    // Decode HTML entities (if necessary)
+    const decodedInitialText = decodeHtml(initialText);
+
+    // Function to replace {word} placeholders with the actual word
+    function replaceWordPlaceholders(content, actualWord) {
+        return content.replace(/\{word\}/g, actualWord);
+    }
+
+    // On page load
+    document.addEventListener("DOMContentLoaded", function() {
+        const textContainer = document.getElementById("text");
+
+        // On load, display the initial text with {word} placeholders replaced with '...'
+        const content = decodedInitialText || textContainer.innerHTML;
+        textContainer.innerHTML = content.replace(/\{word\}/g, '...');
+
+        // Event listener for the "Reveal the Word" button
+        document.getElementById("rainbow-button-reveal").addEventListener("click", function() {
+            // Save the state of each form before updating the content
+            $('.entry-form', textContainer).each(function() {
+                const form = $(this);
+                const entryId = form.attr('data-entry-id');
+                const added = form.data('added') || false;
+                formStates[entryId] = added;
+            });
+
+            const replacedText = replaceWordPlaceholders(decodedInitialText, actualWord);
+
+            // Update the textContainer with the replaced text
+            textContainer.innerHTML = replacedText;
+
+            // Reapply the event listeners for form submission
+            // [Your existing code to reattach event listeners]
+
+            // Restore the state of each form after updating the content
+            $('.entry-form', textContainer).each(function() {
+                const form = $(this);
+                const entryId = form.attr('data-entry-id');
+                if (formStates[entryId]) {
+                    const button = form.find('.rainbow-button-vocabulary-submission');
+                    button.addClass('is-disabled');
+                    button.text('Successfully added to vocabulary!');
+                    form.data('added', true);
+                }
+            });
+        });
+    });
+</script>
+
+
+
+
+
+
+</body>
+</html>

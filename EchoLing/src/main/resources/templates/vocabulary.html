@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EchoLing Vocabulary</title>
+    <link rel="stylesheet" th:href="@{/css/vocabulary.css}">
+</head>
+
+<body>
+<!-- Toggle Button -->
+<button class="menu-button" onclick="toggleSidebar()">☰</button>
+
+<!-- Sidebar -->
+<div class="sidebar hidden" id="sidebar">
+    <div class="sidebar-header">
+        <img th:src="@{/css/images/default_user.png}" alt="User Logo">
+        <span th:text="${user.username}">User</span>
+        <button class="close-btn" onclick="toggleSidebar()">×</button>
+    </div>
+    <div class="sidebar-nav">
+        <a th:href="@{/main}">Main Page</a>
+        <a th:href="@{/quiz}">Quiz</a>
+        <a th:href="@{/definition}">Discover Definitions</a>
+        <a th:href="@{/sign-in}">Change account</a>
+    </div>
+</div>
+
+<div class="main-container">
+    <input type="hidden" id="csrf-token" th:name="_csrf" th:value="${_csrf.token}" />
+
+    <h2>Vocabulary List</h2>
+
+    <table class="vocab-table">
+        <thead>
+        <tr>
+            <th>Word</th>
+            <th>Definitions</th>
+            <th>Examples</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Loop over vocabulary items using Thymeleaf -->
+        <tr th:each="vocab : ${vocabularyList}" data-id="${vocab.id}">
+            <td ><p th:text="${vocab.word.word}"></p></td>
+            <td>
+                <p th:text= "${vocab.definition.definitionText}">Definition</p>
+            </td>
+            <td>
+                <p th:text= "${vocab.example.exampleText}">Example</p>
+            </td>
+            <td><button class="delete-button" th:attr="data-id=${vocab.id}">Delete</button></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('open');
+        sidebar.classList.toggle('hidden');
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Get the CSRF token from the hidden input
+        const csrfToken = $('#csrf-token').val();
+
+        // Event listener for the delete button
+        $('.delete-button').on('click', function() {
+
+            const button = $(this);
+            const vocabularyId = button.data('id'); // Get the vocabulary ID from the button data attribute
+
+            // AJAX DELETE request
+            $.ajax({
+                url: '/vocabulary/' + vocabularyId, // Adjust the URL based on your controller
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken // Include the CSRF token in the request header
+                },
+                success: function(response) {
+                    // Remove the entire row (tr) containing the button after successful deletion
+                    $('tr[data-id="' + vocabularyId + '"]').remove();
+                    button.closest('tr').remove(); // Remove the specific row from the table
+                },
+                error: function() {
+                    alert('Something went wrong.');
+                }
+            });
+        });
+    });
+</script>
+
+
+
+</body>
+</html>

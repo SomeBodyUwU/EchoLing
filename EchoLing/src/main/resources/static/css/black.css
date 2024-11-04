@@ -1,0 +1,218 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #141418;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+    color: #fff;
+}
+.sidebar {
+    width: 200px;
+    height: 100%;
+    background-color: #181717;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 2rem;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    position: fixed;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #996688;
+    margin-bottom: 2rem;
+}
+
+.nav-links {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.nav-links a {
+    color: #888;
+    text-decoration: none;
+    padding: 1rem;
+    text-align: center;
+    border-bottom: 1px solid #242222;
+}
+
+.nav-links a:hover {
+    background-color: #242222;
+}
+
+.main-content {
+    margin-left: 220px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+}
+
+.search-bar {
+    left: 220px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+    flex-shrink: 0;
+    z-index: 1;
+}
+
+.search-bar input[type="text"] {
+    padding: 10px;
+    width: 1000px;
+    border: 1px solid #554444;
+    background-color: #242222;
+    color: #999;
+    border-radius: 20px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+.recommendation-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 1000px;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    margin: 60px auto 0;
+}
+
+.recommendation {
+    padding: 1.5rem;
+    background-color: #242222;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.recommendation:hover {
+    background-color: #342530;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+}
+
+.recommendation h2 {
+    margin: 0;
+    color: #ffd700;
+}
+
+.recommendation p {
+    margin: 0.5rem 0;
+    color: #888;
+}
+
+.recommendation .language, .recommendation .level {
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+.login-container {
+    background-color: #181717;
+    padding: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    width: 300px;
+    horiz-align: center;
+    text-align: center;
+
+}
+
+.login-container h2 {
+    margin-bottom: 1.5rem;
+    color: #463333;
+}
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #554444;
+    background-color: #242222;
+    color: #999;
+    box-sizing: border-box;
+    border-radius: 18px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #442530;
+    color: #887788;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+button:hover {
+    background-color: #342530;
+}
+
+.error-message {
+    text-align: center;
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+}
+
+/* Скидання пароля */
+.forgot-password {
+    margin-top: 1rem;
+    display: block;
+}
+
+.forgot-password a {
+    text-decoration: none;
+    color: #334477;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+select {
+    width: 100%;
+    height: 100px;
+}
+
+.material-link {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.material-link a {
+    display: inline-block;
+    margin: 10px;
+    text-decoration: none;
+    color: #00f;
+}
+
+.material-link a:hover {
+    text-decoration: underline;
+}
+textarea {
+    resize: none;
+    color: #fff;
+    background-color: #170d14;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    width: 100%;
+    border: 1px solid #001c35;
+    border-radius: 5px 15px 15px 15px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.flags-section{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 750px;
+}
